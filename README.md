@@ -4,7 +4,7 @@ The tasks described below are meant to gauge your experience and expertise in sc
 
 You should begin by forking this repository.  When you've completed as much as possible, open a pull request in the original repo so we can review your changes. In addition to leaving comments in your code, feel free to leave comments in your PR about how you approached the problem, how you followed SOLID principles, or other useful context.
 
-####Context
+#### Context
 This solution models a theoretical world where items are stored in a warehouse, and there is an accounting system that keeps track of the current value of all items in inventory. 
 Unfortunately, the system that tracks warehouse quantities by location is separate from the accounting system that tracks values. Sometimes these 2 systems get out of sync and so we need a way to reconcile them! 
 The **InventoryService** class contains two classes that model the primary domain objects of these 2 systems. 
