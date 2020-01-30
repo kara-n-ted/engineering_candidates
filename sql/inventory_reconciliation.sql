@@ -27,4 +27,22 @@ INSERT INTO @accounting VALUES ('xxccM', 7602.75)
 INSERT INTO @accounting VALUES ('fbr77', 17.99)
 
 --TODO-CHALLENGE: Write a query to reconcile matches/differences between the inventory and accounting tables
-SELECT * FROM ...
+--SELECT * FROM ...
+select  distinct
+case --Conditional to tell which item number, because due to the outer join and the dataset, we have some items with no accounting data
+    when a.ItemNumber is null and i1.ItemNumber is null then i2.ItemNumber
+    when a.ItemNumber is null and i2.ItemNumber is null then i1.ItemNumber
+    when a.ItemNumber is not null then a.ItemNumber
+end "ItemNumber",
+a.TotalInventoryValue, 
+case --Conditional that shows the total number for the item number in the warehouses, combining if there are multiple locations. Admittedly, this only works if there is 2 or fewer locations per item. 
+    when i2.ItemNumber is null then (i1.QuantityOnHand*i1.PricePerItem) 
+    when i1.ItemNumber is null then (i2.QuantityOnHand*i2.PricePerItem) 
+    else (i1.QuantityOnHand * i1.PricePerItem) + (i2.QuantityOnHand * i2.PricePerItem) 
+end "Total in Warehouses"
+from @accounting as a
+full outer join @inventory as i1
+    on UPPER(a.ItemNumber) = UPPER(i1.ItemNumber)
+left join @inventory as i2
+    on UPPER(a.ItemNumber) = UPPER(i2.ItemNumber)
+    and i1.WarehouseLocation <> i2.WarehouseLocation 
